@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operadora de TV</title>
+<style>
+  body, html {
+    height: 100%;
+    margin: 0;
+    background-color: black;
+    color: white;
+  }
+
+.canal-button {
+    cursor: pointer;
+    margin-bottom: 5px;
+    width: calc(33.33% - 10px);
+    max-width: 150px;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 10px;
+    color: black;
+    font-size: 12px;
+    font-weight: bold; /* Adicionado para deixar o texto em negrito */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 150px;
+    position: relative;
+    overflow: hidden; /* Adicionado para esconder conteúdo que extrapola o botão */
+}
+
+.canal-button img {
+    width: 100%;
+    max-width: 100%;
+    height: 100px; /* Defina a altura desejada para as imagens */
+    object-fit: contain; /* Mantém a proporção da imagem e evita que seja cortada */
+    margin-bottom: 10px;
+}
+
+
+@media screen and (max-width: 767px) {
+    .canal-button {
+        max-width: none; /* Remove a largura máxima em telas menores */
+    }
+}
+
+
+
+  .iframe-container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+    max-height: 1000px;
+    max-width: 1777.8px;
+    margin: auto;
+    z-index: 0;
+    display: none; /* Inicia oculto */
+  }
+
+  .iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 250%;
+    border: none;
+  }
+
+  .back-button-container {
+    width: 100%;
+    position: absolute;
+    top: 10px;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    z-index: 2;
+    display: none; /* Inicia oculto */
+  }
+
+  .back-button {
+    background-color: black;
+    border: 2px solid white;
+    border-radius: 10px;
+    padding: 10px 15px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  .spacer {
+    height: 20px;
+  }
+
+.spacer1 {
+    height: 5px;
+  }
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+#search-input {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-right: 10px;
+  width: 70%;
+}
+
+.search-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007BFF;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-family: Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.search-button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    background-color: black;
+    z-index: 1000;
+  }
+
+  .home-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .home-button img {
+    width: 400px;
+    height: 70px;
+  }
+
+  .main-content {
+    margin-top: 80px; /* Ajuste a altura conforme necessário */
+  }
+
+.header.hidden {
+    display: none;
+
+</style>
+</head>
+<body>
+
+<div class="header" id="header"> <!-- Adicionei um ID "header" ao cabeçalho -->
+  <button class="home-button" onclick="window.location.href='######POR URL DA PAGINA INICIAR'">
+    <img src="https://i.imgur.com/e9JN0me.png" alt="Ícone da Página Inicial">
+  </button>
+</div>
+<p class="spacer1"></p>
+<div class="main-content">
+
+<div class="search-container">
+  <input type="text" id="search-input" placeholder="Pesquise seu canal favorito">
+  <button class="search-button" onclick="pesquisar()">Pesquisar</button>
+</div>
+<div id="canais"style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+
+<button class="canal-button" onclick="mudarCanal('https://reidoscanais.com/embed/?id=aparecida')">
+    <img src="https://upload.wikimedia.org/wikipedia/pt/1/1e/Logotipo_da_TV_Aparecida.png" alt="Ícone do Canal 21">
+    TV APARECIDA
+  </button>
+
+<button class="canal-button" onclick="mudarCanal('https://www-redegospel-tv-br.filesusr.com/html/d978d9_126e6dc4ff0427b95b097166b54c81d1.html')">
+    <img src="https://i.imgur.com/mttSwgO.png" alt="Ícone do Canal 2">
+    REDE GOSPEL
+  </button>
+
+  <button class="canal-button" onclick="mudarCanal('https://player.jmvstream.com/lvw/LQQkxtAMXzxJcp0qLbfdJ4gYVZoag4')">
+    <img src="https://upload.wikimedia.org/wikipedia/pt/3/39/Rede_Boas_Novas.png" alt="Ícone do Canal 3">
+    BOAS NOVAS
+  </button>
+   
+  <button class="canal-button" onclick="mudarCanal('https://cvd1.cds.ebtcvd.net/live-redevida/smil:redevida.smil/playlist.m3u8')">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Rede_Vida_logo.png" alt="Ícone do Canal 4">
+    REDE VIDA
+</button>
+
+<button class="canal-button" onclick="mudarCanal('https://www.youtube.com/embed/CAVMLklqK1s')">
+    <img src="https://upload.wikimedia.org/wikipedia/pt/3/3f/Logotipo_da_TV_Can%C3%A7%C3%A3o_Nova.png" alt="Ícone do Canal 4">
+    TV CANÇÃO NOVA
+</button>
+
+<button class="canal-button" onclick="mudarCanal('https://player.jmvstream.com/lvw/DhqfxTybrvDUu7iMnuVVrGTZV2miq1')">
+    <img src="https://upload.wikimedia.org/wikipedia/pt/b/b4/Rede_S%C3%A9culo_21.jpg" alt="Ícone do Canal 4">
+    REDE SÉCULO 21 (RS21)
+</button>
+
+<button class="canal-button" onclick="mudarCanal('https://reidoscanais.com/embed/?id=band')">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2b/Rede_Bandeirantes_logo_2018.svg" alt="Ícone do Canal 5">
+    BAND
+  </button>
+
+<button class="canal-button" onclick="mudarCanal('https://playervipmaster.com/myplay/watch.php?id=band')">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2b/Rede_Bandeirantes_logo_2018.svg" alt="Ícone do Canal 21">
+    BAND (2ª Opção)
+  </button>
+
+<button class="canal-button" onclick="mudarCanal('https://reidoscanais.com/embed/?id=recordrio')">
+    <img src="https://upload.wikimedia.org/wikipedia/pt/1/10/Logotipo_da_Record.png" alt="Ícone do Canal 6">
+    RECORD
+  </button>
+
+<button class="canal-button" onclick="mudarCanal('https://playervipmaster.com/myplay/watch.php?id=recordtv')">
+    <img src="https://upload.wikimedia.org/wikipedia/pt/1/10/Logotipo_da_Record.png" alt="Ícone do Canal 6">
+    RECORD (2ª Opção)
+  </button>
+
+<button class="canal-button" onclick="mudarCanal('https://reidoscanais.com/embed/?id=redetv')">
+    <img src="https://upload.wikimedia.org/wikipedia/pt/8/89/Logotipo_da_RedeTV%21.png" alt="Ícone do Canal 7">
+    REDE TV!
+  </button>
+
+<button class="canal-button" onclick="mudarCanal('https://us-east-1.prod.tvcoins.com/player/player.html?culturaplay/2457d4f0-1519-4d1d-bc46-3cbe03074e72&autoplay')">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Cultura_logo_2013.svg" alt="Ícone do Canal 8">
+    TV CULTURA
+  </button>
+
+<button class="canal-button" onclick="mudarCanal('https://playervipmaster.com/myplay/watch.php?id=tvcultura')">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Cultura_logo_2013.svg" alt="Ícone do Canal 8">
+    TV CULTURA (2ª Opção)
+  </button>
+
+<button class="canal-button" onclick="mudarCanal('https://reidoscanais.com/embed/?id=tvcultura')">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Cultura_logo_2013.svg" alt="Ícone do Canal 8">
+    TV CULTURA (3ª Opção)
+  </button>
+
+
+<button class="canal-button" onclick="mudarCanal('https://reidoscanais.com/embed/?id=tvbrasil')">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/TV_Brasil_logo_2019.svg/512px-TV_Brasil_logo_2019.svg.png" alt="Ícone do Canal 10">
+    TV BRASIL
+  </button>
+
+<button class="canal-button" onclick="mudarCanal('https://us-east-1.prod.tvcoins.com/player/player.html?tvdiario/938fd71f-19a5-4755-b678-b998d816784d&autoplay&hide-app-store-buttons&stickyModeAvailable')">
+    <img src="https://i.imgur.com/6ZNP8gs.png" alt="Ícone do Canal 21">
+    TV DIARIO
+  </button>
+
+<button class="canal-button" onclick="mudarCanal('https://aovivo.ebc.com.br/embed-canalgov.html?autoplay=1&v=2')">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/3/34/Canal_Gov_Logo.png" alt="Ícone do Canal 21">
+    CANAL GOV
+  </button>
+
+<button class="canal-button" onclick="mudarCanal('https://reidoscanais.com/embed/?id=gazeta')">
+    <img src="https://i.imgur.com/0sksWse.png" alt="Ícone do Canal 21">
+    TV GAZETA
+  </button>
+
+
+
+
+  <!-- Adicione mais canais conforme necessário -->
+</div>
+
+<div class="back-button-container">
+  <button class="back-button" onclick="voltar()">VOLTAR A LISTA DE CANAIS</button>
+</div>
+
+<p class="spacer1"></p>
+
+<div class="iframe-container">
+  <iframe id="main-iframe" class="iframe" frameborder="0" allow="autoplay; encrypted-media" scrolling="no" frameBorder="0" title="Reprodutor" alt="Reproduzir" allowfullscreen></iframe>
+</div> 
+
+<script>
+function mudarCanal(url) {
+  var mainIframe = document.getElementById('main-iframe');
+  mainIframe.src = url;
+
+  document.querySelector('.iframe-container').style.display = 'block';
+  document.querySelector('.back-button-container').style.display = 'block';
+  document.getElementById('canais').style.display = 'none';
+}
+
+function voltar() {
+  var mainIframe = document.getElementById('main-iframe');
+  mainIframe.src = ''; // Define o src do iframe como vazio para interromper a reprodução
+
+  document.querySelector('.iframe-container').style.display = 'none';
+  document.querySelector('.back-button-container').style.display = 'none';
+  setTimeout(function() {
+    document.getElementById('canais').style.display = 'flex';
+  }, 100);
+}
+
+function mudarCanal(url) {
+  var mainIframe = document.getElementById('main-iframe');
+  mainIframe.src = url;
+
+  document.querySelector('.iframe-container').style.display = 'block';
+  document.querySelector('.back-button-container').style.display = 'block';
+  document.getElementById('canais').style.display = 'none';
+  document.querySelector('.search-container').style.display = 'none'; // Esconde o campo de pesquisa
+  document.getElementById('header').classList.add('hidden');
+}
+
+function voltar() {
+  var mainIframe = document.getElementById('main-iframe');
+  mainIframe.src = '';
+
+  document.querySelector('.iframe-container').style.display = 'none';
+  document.querySelector('.back-button-container').style.display = 'none';
+  setTimeout(function() {
+    document.getElementById('canais').style.display = 'flex';
+  }, 100);
+  document.querySelector('.search-container').style.display = 'flex'; // Mostra o campo de pesquisa
+  document.getElementById('header').classList.remove('hidden');
+}
+
+function pesquisar() {
+  var searchTerm = document.getElementById('search-input').value.toLowerCase();
+  var canais = document.querySelectorAll('.canal-button');
+
+  canais.forEach(function(canal) {
+    var canalNome = canal.innerText.toLowerCase();
+    if (canalNome.includes(searchTerm)) {
+      canal.style.display = 'block';
+    } else {
+      canal.style.display = 'none';
+    }
+  });
+}
+
+</script>
+
+</body>
+</html>
